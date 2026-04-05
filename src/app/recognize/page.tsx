@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Link from 'next/link';
-import { Camera, Upload, X, Search, ChevronRight, AlertCircle } from 'lucide-react';
+import { Camera, Upload, X, Search, ChevronRight, AlertCircle, Calendar } from 'lucide-react';
 import { recognizeArtifact } from '@/lib/api';
 import { mockRecognize } from '@/lib/mockApi';
 import { Artifact, RecognitionResult } from '@/types';
@@ -124,6 +124,13 @@ export default function RecognizePage() {
                 className="bg-heritage-gold hover:bg-heritage-bronze text-white px-6 py-2 rounded-lg transition-colors font-medium"
               >
                 开始识别
+              </Link>
+              <Link
+                href="/checkin"
+                className="text-gray-700 hover:text-heritage-gold font-medium flex items-center space-x-1"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>每日签到</span>
               </Link>
             </nav>
           </div>

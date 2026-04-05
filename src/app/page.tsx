@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Camera, Search, Database, Sparkles } from 'lucide-react';
+import { Camera, Search, Database, Sparkles, Calendar } from 'lucide-react';
 
 export default function HomePage() {
   const features = [
@@ -52,11 +52,15 @@ export default function HomePage() {
               <Link href="/" className="text-heritage-gold hover:text-heritage-bronze font-medium">
                 首页
               </Link>
-              <Link
-                href="/recognize"
-                className="bg-heritage-gold hover:bg-heritage-bronze text-white px-6 py-2 rounded-lg transition-colors font-medium"
-              >
+              <Link href="/recognize" className="text-gray-700 hover:text-heritage-gold font-medium">
                 开始识别
+              </Link>
+              <Link
+                href="/checkin"
+                className="text-gray-700 hover:text-heritage-gold font-medium flex items-center space-x-1"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>每日签到</span>
               </Link>
             </nav>
           </div>
