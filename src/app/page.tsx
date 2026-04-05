@@ -1,0 +1,161 @@
+'use client';
+
+import Link from 'next/link';
+import { Camera, Search, Database, Sparkles } from 'lucide-react';
+
+export default function HomePage() {
+  const features = [
+    {
+      icon: Camera,
+      title: '智能识别',
+      description: '上传文物图片，AI自动识别文物类别和详细信息',
+    },
+    {
+      icon: Search,
+      title: '精准匹配',
+      description: '基于深度学习特征提取，实现高精度文物匹配',
+    },
+    {
+      icon: Database,
+      title: '丰富数据库',
+      description: '涵盖唐三彩、壁画、玉器、金银器等多种文物类别',
+    },
+    {
+      icon: Sparkles,
+      title: '相似推荐',
+      description: '智能推荐相似文物，拓展文物知识视野',
+    },
+  ];
+
+  const categories = [
+    { name: '唐代唐三彩陶器', count: '5件', color: 'bg-amber-100 text-amber-800' },
+    { name: '唐代壁画', count: '5件', color: 'bg-blue-100 text-blue-800' },
+    { name: '唐代玉器', count: '5件', color: 'bg-emerald-100 text-emerald-800' },
+    { name: '唐金银器', count: '6件', color: 'bg-yellow-100 text-yellow-800' },
+  ];
+
+  return (
+    <div className="min-h-screen heritage-pattern">
+      <header className="bg-gradient-to-r from-heritage-gold/10 to-heritage-bronze/10 backdrop-blur-sm border-b border-heritage-gold/20">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-heritage-gold to-heritage-bronze rounded-lg flex items-center justify-center">
+                <Camera className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 font-chinese">文物识别系统</h1>
+                <p className="text-sm text-gray-600">唐代文物智能识别平台</p>
+              </div>
+            </div>
+            <nav className="flex items-center space-x-6">
+              <Link href="/" className="text-heritage-gold hover:text-heritage-bronze font-medium">
+                首页
+              </Link>
+              <Link
+                href="/recognize"
+                className="bg-heritage-gold hover:bg-heritage-bronze text-white px-6 py-2 rounded-lg transition-colors font-medium"
+              >
+                开始识别
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-12">
+        <section className="text-center mb-16">
+          <h2 className="text-5xl font-bold text-gray-900 mb-6 font-chinese">
+            探索唐代文物之美
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            基于深度学习的智能识别系统，帮助您快速识别和了解唐代珍贵文物
+          </p>
+          <Link
+            href="/recognize"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-heritage-gold to-heritage-bronze text-white px-8 py-4 rounded-xl text-lg font-medium hover:shadow-lg transition-all transform hover:scale-105"
+          >
+            <Camera className="w-6 h-6" />
+            <span>立即识别文物</span>
+          </Link>
+        </section>
+
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-center text-gray-900 mb-12 font-chinese">
+            核心功能
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all border border-gray-100"
+              >
+                <div className="w-14 h-14 bg-gradient-to-br from-heritage-gold/20 to-heritage-bronze/20 rounded-xl flex items-center justify-center mb-6">
+                  <feature.icon className="w-7 h-7 text-heritage-gold" />
+                </div>
+                <h4 className="text-xl font-bold text-gray-900 mb-3 font-chinese">
+                  {feature.title}
+                </h4>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h3 className="text-3xl font-bold text-center text-gray-900 mb-12 font-chinese">
+            文物类别
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {categories.map((category, index) => (
+              <div
+                key={index}
+                className={`${category.color} rounded-xl p-6 text-center hover:shadow-lg transition-all cursor-pointer`}
+              >
+                <h4 className="text-lg font-bold mb-2 font-chinese">{category.name}</h4>
+                <p className="text-sm opacity-80">{category.count}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-white rounded-2xl p-12 shadow-sm border border-gray-100">
+          <h3 className="text-3xl font-bold text-center text-gray-900 mb-8 font-chinese">
+            使用指南
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-heritage-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-heritage-gold">1</span>
+              </div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">上传图片</h4>
+              <p className="text-gray-600">拍摄或选择文物照片上传</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-heritage-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-heritage-gold">2</span>
+              </div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">AI识别</h4>
+              <p className="text-gray-600">系统自动分析识别文物</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-heritage-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-heritage-gold">3</span>
+              </div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">查看结果</h4>
+              <p className="text-gray-600">获取详细文物信息和介绍</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="bg-gray-900 text-white py-8 mt-16">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-400">
+            © 2024 文物识别系统 - 唐代文物智能识别平台
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
