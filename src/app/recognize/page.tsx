@@ -47,16 +47,11 @@ export default function RecognizePage() {
     setResult(null);
 
     try {
-      const response = await recognizeArtifact(file, 5, 85);
+      const response = await recognizeArtifact(file);
       setResult(response);
     } catch (err: any) {
-      console.log('后端API不可用，使用模拟数据');
-      try {
-        const mockResponse = await mockRecognize();
-        setResult(mockResponse);
-      } catch (mockErr) {
-        setError('识别失败，请稍后重试');
-      }
+      console.error('识别接口调用失败:', err);
+      setError(`识别失败: ${err.message || '请稍后重试'}`);
     } finally {
       setIsUploading(false);
     }

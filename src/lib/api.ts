@@ -1,23 +1,21 @@
 import axios from 'axios';
 import { RecognitionResult, CategoriesResponse } from '@/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = 'http://121.36.225.183:34859';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000,
+  timeout: 60000,
 });
 
 export const recognizeArtifact = async (
-  file: File,
-  k: number = 3,
-  threshold: number = 85
+  file: File
 ): Promise<RecognitionResult> => {
   const formData = new FormData();
   formData.append('image', file);
 
-  const response = await api.post<RecognitionResult>(
-    `/api/v1/recognize?k=${k}&threshold=${threshold}`,
+  const response = await api.post(
+    '/api/v1/recognize',
     formData,
     {
       headers: {
