@@ -28,24 +28,22 @@ export default function HomePage() {
   ];
 
   const categories = [
-    { name: '唐代唐三彩陶器', count: '5件', color: 'bg-amber-100 text-amber-800' },
-    { name: '唐代壁画', count: '5件', color: 'bg-blue-100 text-blue-800' },
-    { name: '唐代玉器', count: '5件', color: 'bg-emerald-100 text-emerald-800' },
-    { name: '唐金银器', count: '6件', color: 'bg-yellow-100 text-yellow-800' },
+    { name: '唐代', count: '20件' },
+    { name: '宋代', count: '等待添加' },
+    { name: '元代', count: '等待添加' },
+    { name: '明代', count: '等待添加' },
   ];
 
   return (
     <div className="min-h-screen heritage-pattern">
-      <header className="bg-gradient-to-r from-heritage-gold/10 to-heritage-bronze/10 backdrop-blur-sm border-b border-heritage-gold/20">
+      <header className="bg-gradient-to-r from-primary-blue/10 to-secondary-blue/10 backdrop-blur-sm border-b border-light-blue/20">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-heritage-gold to-heritage-bronze rounded-lg flex items-center justify-center">
-                <Camera className="w-7 h-7 text-white" />
-              </div>
+              <img src="/logo.jpg" alt="Logo" className="w-12 h-12 rounded-lg object-cover" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 font-chinese">文物识别系统</h1>
-                <p className="text-sm text-gray-600">唐代文物智能识别平台</p>
+                <h1 className="text-2xl font-bold text-white font-chinese">文物识别系统</h1>
+                <p className="text-sm text-gray-300">文物智能识别平台</p>
               </div>
             </div>
             <nav className="flex items-center space-x-6">
@@ -77,10 +75,10 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-12">
         <section className="text-center mb-16">
           <h2 className="text-5xl font-bold text-white mb-6 font-chinese">
-            探索唐代文物之美
+            探索文物之美
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-            基于深度学习的智能识别系统，帮助您快速识别和了解唐代珍贵文物
+            基于深度学习的智能识别系统，帮助您快速识别和了解珍贵文物
           </p>
           <Link
             href="/recognize"
@@ -115,7 +113,7 @@ export default function HomePage() {
 
         <section className="mb-16">
           <h3 className="text-3xl font-bold text-center text-white mb-12 font-chinese">
-            文物类别
+            朝代
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {categories.map((category, index) => (
@@ -163,7 +161,7 @@ export default function HomePage() {
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
-            © 2026 文物识别系统 - 唐代文物智能识别平台
+            © 2026 文物识别系统 - 文物智能识别平台
           </p>
         </div>
       </footer>

@@ -31,20 +31,20 @@ interface Series {
 const mockSeries: Series[] = [
   {
     id: 'series-1',
-    name: '唐代唐三彩陶器',
+    name: '唐三彩陶器',
     artifacts: [
       {
         id: 'artifact-1',
         name: '唐三彩骆驼载乐俑',
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20camel%20with%20musicians&size=512x512',
-        series: '唐代唐三彩陶器',
-        description: '唐代三彩陶艺的代表作品，描绘了骆驼载着乐师的场景',
+        series: '唐三彩陶器',
+        description: '三彩陶艺的代表作品，描绘了骆驼载着乐师的场景',
         collected: true,
         comments: [
           {
             id: 'comment-1',
             user: '文物爱好者',
-            content: '这件文物非常精美，展现了唐代的艺术水平',
+            content: '这件文物非常精美，展现了艺术水平',
             createdAt: '2024-01-01',
           },
         ],
@@ -53,8 +53,8 @@ const mockSeries: Series[] = [
         id: 'artifact-2',
         name: '唐三彩马',
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20horse&size=512x512',
-        series: '唐代唐三彩陶器',
-        description: '唐代三彩陶马，造型生动，色彩艳丽',
+        series: '唐三彩陶器',
+        description: '三彩陶马，造型生动，色彩艳丽',
         collected: true,
         comments: [],
       },
@@ -62,8 +62,8 @@ const mockSeries: Series[] = [
         id: 'artifact-3',
         name: '唐三彩仕女俑',
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20female%20figure&size=512x512',
-        series: '唐代唐三彩陶器',
-        description: '唐代三彩陶仕女俑，展现了唐代女性的服饰和姿态',
+        series: '唐三彩陶器',
+        description: '三彩陶仕女俑，展现了女性的服饰和姿态',
         collected: false,
         comments: [],
       },
@@ -72,14 +72,14 @@ const mockSeries: Series[] = [
   },
   {
     id: 'series-2',
-    name: '唐代壁画',
+    name: '壁画',
     artifacts: [
       {
         id: 'artifact-4',
         name: '飞天壁画',
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20flying%20Apsara%20mural&size=512x512',
-        series: '唐代壁画',
-        description: '唐代敦煌壁画中的飞天形象，轻盈飘逸',
+        series: '壁画',
+        description: '敦煌壁画中的飞天形象，轻盈飘逸',
         collected: true,
         comments: [],
       },
@@ -87,8 +87,8 @@ const mockSeries: Series[] = [
         id: 'artifact-5',
         name: '狩猎图壁画',
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20hunting%20scene%20mural&size=512x512',
-        series: '唐代壁画',
-        description: '唐代壁画中的狩猎场景，展现了当时的生活',
+        series: '壁画',
+        description: '壁画中的狩猎场景，展现了当时的生活',
         collected: true,
         comments: [],
       },
@@ -104,17 +104,32 @@ export default function GalleryPage() {
   const [showAnimation, setShowAnimation] = useState(false);
 
   const handleToggleCollect = (artifactId: string) => {
+    let seriesThatWasCompleted = null;
+    
     setSeries(prevSeries =>
-      prevSeries.map(s => ({
-        ...s,
-        artifacts: s.artifacts.map(a =>
+      prevSeries.map(s => {
+        const newArtifacts = s.artifacts.map(a =>
           a.id === artifactId ? { ...a, collected: !a.collected } : a
-        ),
-        completed: s.artifacts
-          .map(a => (a.id === artifactId ? !a.collected : a.collected))
-          .every(Boolean),
-      }))
+        );
+        const wasNotCompleted = !s.completed;
+        const isNowCompleted = newArtifacts.every(a => a.collected);
+        
+        if (wasNotCompleted && isNowCompleted) {
+          seriesThatWasCompleted = s.id;
+        }
+        
+        return {
+          ...s,
+          artifacts: newArtifacts,
+          completed: isNowCompleted,
+        };
+      })
     );
+    
+    if (seriesThatWasCompleted) {
+      setShowAnimation(true);
+      setTimeout(() => setShowAnimation(false), 3000);
+    }
   };
 
   const handleAddComment = (artifactId: string) => {
@@ -146,13 +161,7 @@ export default function GalleryPage() {
     setSelectedArtifact(null);
   };
 
-  useEffect(() => {
-    const completedSeries = series.filter(s => s.completed);
-    if (completedSeries.length > 0) {
-      setShowAnimation(true);
-      setTimeout(() => setShowAnimation(false), 3000);
-    }
-  }, [series]);
+
 
   return (
     <div className="min-h-screen heritage-pattern">
@@ -160,12 +169,10 @@ export default function GalleryPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-lg flex items-center justify-center">
-                <Camera className="w-7 h-7 text-white" />
-              </div>
+              <img src="/logo.jpg" alt="Logo" className="w-12 h-12 rounded-lg object-cover" />
               <div>
                 <h1 className="text-2xl font-bold text-white font-chinese">文物识别系统</h1>
-                <p className="text-sm text-gray-300">唐代文物智能识别平台</p>
+                <p className="text-sm text-gray-300">文物智能识别平台</p>
               </div>
             </Link>
             <nav className="flex items-center space-x-6">

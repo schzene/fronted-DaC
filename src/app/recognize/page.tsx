@@ -106,12 +106,10 @@ export default function RecognizePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Link href="/" className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-lg flex items-center justify-center">
-                  <Camera className="w-7 h-7 text-white" />
-                </div>
+                <img src="/logo.jpg" alt="Logo" className="w-12 h-12 rounded-lg object-cover" />
                 <div>
                   <h1 className="text-2xl font-bold text-white font-chinese">文物识别系统</h1>
-                  <p className="text-sm text-gray-300">唐代文物智能识别平台</p>
+                  <p className="text-sm text-gray-300">文物智能识别平台</p>
                 </div>
               </Link>
             </div>
