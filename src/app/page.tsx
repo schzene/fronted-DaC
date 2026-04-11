@@ -80,6 +80,7 @@ export default function HomePage() {
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             文物识别与智慧展示系统，帮助您快速识别和了解珍贵文物
           </p>
+          
           <Link
             href="/recognize"
             className="inline-flex items-center space-x-2 bg-gradient-to-r from-primary-blue to-secondary-blue text-white px-8 py-4 rounded-xl text-lg font-medium hover:shadow-lg transition-all transform hover:scale-105"
@@ -158,6 +159,20 @@ export default function HomePage() {
         </section>
       </main>
 
+      {/* 右下角固定视频 */}
+      <div className="fixed bottom-8 right-8 z-50">
+        <div className="bg-dark-blue/50 rounded-2xl p-4 shadow-xl border border-light-blue/20 overflow-hidden">
+          <video
+            src="/15.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-48 h-32 object-cover rounded-xl"
+          />
+        </div>
+      </div>
+      
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">

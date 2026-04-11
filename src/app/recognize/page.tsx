@@ -286,7 +286,7 @@ export default function RecognizePage() {
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
-            © 2024 文物识别系统 - 唐代文物智能识别平台
+            © 2026 文物识别系统 - 文物智能识别平台
           </p>
         </div>
       </footer>
