@@ -55,7 +55,7 @@ const mockSeries: Series[] = [
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20horse&size=512x512',
         series: '唐三彩陶器',
         description: '三彩陶马，造型生动，色彩艳丽',
-        collected: true,
+        collected: false,
         comments: [],
       },
       {
@@ -80,7 +80,7 @@ const mockSeries: Series[] = [
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20flying%20Apsara%20mural&size=512x512',
         series: '壁画',
         description: '敦煌壁画中的飞天形象，轻盈飘逸',
-        collected: true,
+        collected: false,
         comments: [],
       },
       {
@@ -89,11 +89,11 @@ const mockSeries: Series[] = [
         image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20hunting%20scene%20mural&size=512x512',
         series: '壁画',
         description: '壁画中的狩猎场景，展现了当时的生活',
-        collected: true,
+        collected: false,
         comments: [],
       },
     ],
-    completed: true,
+    completed: false,
   },
 ];
 

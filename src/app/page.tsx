@@ -75,10 +75,10 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-12">
         <section className="text-center mb-16">
           <h2 className="text-5xl font-bold text-white mb-6 font-chinese">
-            探索文物之美
+            数存古韵
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-            基于深度学习的智能识别系统，帮助您快速识别和了解珍贵文物
+            文物识别与智慧展示系统，帮助您快速识别和了解珍贵文物
           </p>
           <Link
             href="/recognize"
