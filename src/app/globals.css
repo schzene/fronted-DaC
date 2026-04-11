@@ -4,8 +4,8 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 15, 40, 80;
-  --background-end-rgb: 10, 25, 55;
+  --background-start-rgb: 25, 55, 100;
+  --background-end-rgb: 18, 40, 75;
   --primary-blue: #60a5fa;
   --secondary-blue: #93c5fd;
   --light-blue: #bfdbfe;
