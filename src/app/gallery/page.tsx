@@ -138,7 +138,7 @@ export default function GalleryPage() {
   // 触发集齐动画 - 在这里可以轻松替换为您想要的动画
   const triggerCompletionAnimation = () => {
     setShowAnimation(true);
-    setTimeout(() => setShowAnimation(false), 5000);
+    setTimeout(() => setShowAnimation(false), 180000);
   };
 
   // 手动测试动画按钮（仅用于测试）
