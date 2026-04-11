@@ -5,8 +5,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: '文物识别系统 - 唐代文物智能识别',
-  description: '基于深度学习的唐代文物智能识别系统，支持唐三彩、壁画、玉器、金银器等多种文物类别的识别',
+  title: '文物识别系统 - 文物智能识别',
+  description: '基于深度学习的文物智能识别系统，支持壁画、玉器、金银器等多种文物类别的识别',
 };
 
 export default function RootLayout({

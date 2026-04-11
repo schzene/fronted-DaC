@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 251, 240;
-  --background-end-rgb: 245, 243, 235;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 10, 30, 60;
+  --background-end-rgb: 5, 15, 30;
+  --primary-blue: #1a56db;
+  --secondary-blue: #3b82f6;
+  --light-blue: #93c5fd;
+  --dark-blue: #1e40af;
 }
 
 body {
@@ -22,8 +26,23 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .bg-primary-blue {
+    background-color: var(--primary-blue);
+  }
+  .bg-secondary-blue {
+    background-color: var(--secondary-blue);
+  }
+  .text-primary-blue {
+    color: var(--primary-blue);
+  }
+  .text-secondary-blue {
+    color: var(--secondary-blue);
+  }
+  .border-blue {
+    border-color: var(--light-blue);
+  }
 }
 
 .heritage-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233b82f6' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
