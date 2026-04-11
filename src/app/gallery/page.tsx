@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Heart, ChevronRight, Sparkles, Camera, Calendar, BookOpen, MessageSquare } from 'lucide-react';
 
@@ -393,19 +393,34 @@ export default function GalleryPage() {
 // ========== 集齐动画组件 ==========
 // 您可以轻松在这里替换成自己想要的动画效果
 function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = 0;
+      video.play().catch(err => console.log('Video play error:', err));
+    }
+  }, []);
+
+  const handleVideoEnd = () => {
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={onClose}>
       <div 
-        className="bg-black rounded-3xl p-2 max-w-4xl w-full mx-4 shadow-2xl overflow-hidden"
+        className="bg-black rounded-3xl p-4 max-w-5xl w-full mx-4 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 视频动画区域 */}
         <video
+          ref={videoRef}
           src="/13.mp4"
           autoPlay
           muted
-          loop
           playsInline
+          onEnded={handleVideoEnd}
           className="w-full rounded-2xl"
         />
 
