@@ -416,7 +416,7 @@ function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onCl
         {/* 视频动画区域 */}
         <video
           ref={videoRef}
-          src="/13.mp4"
+          src="https://image.0xc0de.top/file/1775902333552_1.mp4"
           autoPlay
           muted
           playsInline
