@@ -45,7 +45,7 @@ const mockSeries: Series[] = [
             id: 'comment-1',
             user: '文物爱好者',
             content: '这件文物非常精美，展现了艺术水平',
-            createdAt: '2024-01-01',
+            createdAt: '2026-01-01',
           },
         ],
       },
@@ -102,9 +102,11 @@ export default function GalleryPage() {
   const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   const [newComment, setNewComment] = useState('');
   const [showAnimation, setShowAnimation] = useState(false);
+  const [completedSeriesName, setCompletedSeriesName] = useState('');
 
   const handleToggleCollect = (artifactId: string) => {
     let seriesThatWasCompleted = null;
+    let completedName = '';
     
     setSeries(prevSeries =>
       prevSeries.map(s => {
@@ -116,6 +118,7 @@ export default function GalleryPage() {
         
         if (wasNotCompleted && isNowCompleted) {
           seriesThatWasCompleted = s.id;
+          completedName = s.name;
         }
         
         return {
@@ -127,9 +130,21 @@ export default function GalleryPage() {
     );
     
     if (seriesThatWasCompleted) {
-      setShowAnimation(true);
-      setTimeout(() => setShowAnimation(false), 3000);
+      setCompletedSeriesName(completedName);
+      triggerCompletionAnimation();
     }
+  };
+
+  // 触发集齐动画 - 在这里可以轻松替换为您想要的动画
+  const triggerCompletionAnimation = () => {
+    setShowAnimation(true);
+    setTimeout(() => setShowAnimation(false), 5000);
+  };
+
+  // 手动测试动画按钮（仅用于测试）
+  const testAnimation = () => {
+    setCompletedSeriesName('测试套系');
+    triggerCompletionAnimation();
   };
 
   const handleAddComment = (artifactId: string) => {
@@ -206,19 +221,24 @@ export default function GalleryPage() {
           <h2 className="text-4xl font-bold text-white mb-6 font-chinese">
             文物图鉴收藏
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-4">
             收藏文物图片，查看套系集齐情况，参与互动评论
           </p>
+          <button
+            onClick={testAnimation}
+            className="bg-secondary-blue hover:bg-primary-blue text-white px-6 py-2 rounded-lg transition-colors text-sm"
+          >
+            🔍 测试集齐动画
+          </button>
         </section>
 
+        {/* ========== 集齐动画区域 ========== */}
+        {/* 在这里可以轻松替换为您想要的动画效果 */}
         {showAnimation && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-dark-blue rounded-2xl p-8 text-center animate-pulse">
-              <Sparkles className="w-16 h-16 text-light-blue mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">套系集齐！</h3>
-              <p className="text-gray-300">恭喜您集齐了一个完整的文物套系</p>
-            </div>
-          </div>
+          <CompletionAnimation 
+            seriesName={completedSeriesName}
+            onClose={() => setShowAnimation(false)}
+          />
         )}
 
         <div className="space-y-12">
@@ -362,10 +382,51 @@ export default function GalleryPage() {
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
-            © 2024 文物识别系统 - 唐代文物智能识别平台
+            © 2026 文物识别系统 - 文物智能识别平台
           </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+// ========== 集齐动画组件 ==========
+// 您可以轻松在这里替换成自己想要的动画效果
+function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={onClose}>
+      <div 
+        className="bg-gradient-to-br from-primary-blue/90 to-secondary-blue/90 rounded-3xl p-12 text-center max-w-md mx-4 border-2 border-light-blue/50 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 动画效果区域 - 在这里可以插入您想要的动画 */}
+        <div className="relative mb-6">
+          {/* 闪光效果 */}
+          <div className="absolute inset-0 animate-ping opacity-30">
+            <Sparkles className="w-24 h-24 text-white mx-auto" />
+          </div>
+          <Sparkles className="w-24 h-24 text-light-blue mx-auto relative z-10 animate-bounce" />
+        </div>
+
+        {/* 文字内容 */}
+        <h3 className="text-3xl font-bold text-white mb-3 font-chinese">
+          🎉 套系集齐！
+        </h3>
+        <p className="text-xl text-light-blue mb-2 font-chinese">
+          {seriesName}
+        </p>
+        <p className="text-gray-200 mb-6">
+          恭喜您集齐了完整的套系！
+        </p>
+
+        {/* 关闭按钮 */}
+        <button
+          onClick={onClose}
+          className="bg-white text-primary-blue px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105"
+        >
+          太棒了！
+        </button>
+      </div>
     </div>
   );
 }
