@@ -163,7 +163,7 @@ export default function HomePage() {
       <div className="fixed bottom-8 right-8 z-50">
         <div className="bg-dark-blue/50 rounded-2xl p-4 shadow-xl border border-light-blue/20 overflow-hidden">
           <video
-            src="/16.mp4"
+            src="https://image.0xc0de.top/file/1775901346003_16.mp4"
             autoPlay
             muted
             loop
