@@ -394,38 +394,37 @@ export default function GalleryPage() {
 // 您可以轻松在这里替换成自己想要的动画效果
 function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={onClose}>
       <div 
-        className="bg-gradient-to-br from-primary-blue/90 to-secondary-blue/90 rounded-3xl p-12 text-center max-w-md mx-4 border-2 border-light-blue/50 shadow-2xl"
+        className="bg-black rounded-3xl p-2 max-w-4xl w-full mx-4 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 动画效果区域 - 在这里可以插入您想要的动画 */}
-        <div className="relative mb-6">
-          {/* 闪光效果 */}
-          <div className="absolute inset-0 animate-ping opacity-30">
-            <Sparkles className="w-24 h-24 text-white mx-auto" />
-          </div>
-          <Sparkles className="w-24 h-24 text-light-blue mx-auto relative z-10 animate-bounce" />
+        {/* 视频动画区域 */}
+        <video
+          src="/13.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full rounded-2xl"
+        />
+
+        {/* 文字和按钮层（可选，如果视频已经包含内容可以去掉） */}
+        <div className="p-6 text-center">
+          <h3 className="text-2xl font-bold text-white mb-2 font-chinese">
+            🎉 套系集齐！
+          </h3>
+          <p className="text-lg text-gray-300 mb-4 font-chinese">
+            {seriesName}
+          </p>
+          
+          <button
+            onClick={onClose}
+            className="bg-primary-blue hover:bg-secondary-blue text-white px-8 py-3 rounded-xl font-bold text-lg transition-all transform hover:scale-105"
+          >
+            关闭
+          </button>
         </div>
-
-        {/* 文字内容 */}
-        <h3 className="text-3xl font-bold text-white mb-3 font-chinese">
-          🎉 套系集齐！
-        </h3>
-        <p className="text-xl text-light-blue mb-2 font-chinese">
-          {seriesName}
-        </p>
-        <p className="text-gray-200 mb-6">
-          恭喜您集齐了完整的套系！
-        </p>
-
-        {/* 关闭按钮 */}
-        <button
-          onClick={onClose}
-          className="bg-white text-primary-blue px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105"
-        >
-          太棒了！
-        </button>
       </div>
     </div>
   );
