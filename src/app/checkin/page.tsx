@@ -161,7 +161,7 @@ export default function CheckInPage() {
                 </div>
               )}
 
-              {stats?.todayStatus !== 'not_checked' && stats.todayRecord && (
+              {stats?.todayStatus !== 'not_checked' && stats?.todayRecord && (
                 <div>
                   <div className="w-32 h-32 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 className="w-16 h-16 text-green-400" />
@@ -169,7 +169,7 @@ export default function CheckInPage() {
                   <div className="space-y-3">
                     <p className="text-xl font-bold text-green-300">已签到 ✓</p>
                     <p className="text-gray-300">
-                      签到时间：{stats.todayRecord.checkInTime}
+                      签到时间：{stats.todayRecord?.checkInTime}
                     </p>
                     <p className="text-gray-300">今日学习已完成！</p>
                   </div>
