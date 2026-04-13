@@ -271,7 +271,7 @@ export default function GalleryPage() {
                       <img
                         src={artifact.collected ? artifact.image : '/5.png'}
                         alt={artifact.name}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-48 object-contain bg-gray-50"
                       />
                       <button
                         onClick={() => handleToggleCollect(artifact.id)}
@@ -321,11 +321,13 @@ export default function GalleryPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="relative">
-              <img
-                src={selectedArtifact.collected ? selectedArtifact.image : '/5.png'}
-                alt={selectedArtifact.name}
-                className="w-full h-64 object-cover rounded-t-2xl"
-              />
+              <div className="bg-gray-50 w-full h-64 flex items-center justify-center rounded-t-2xl overflow-hidden">
+                <img
+                  src={selectedArtifact.collected ? selectedArtifact.image : '/5.png'}
+                  alt={selectedArtifact.name}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
               <button
                 onClick={() => setSelectedArtifact(null)}
                 className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors"
