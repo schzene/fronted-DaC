@@ -161,7 +161,6 @@ export default function HomePage() {
           <video
             src="https://image.0xc0de.top/file/1775901346003_16.mp4"
             autoPlay
-            muted
             loop
             playsInline
             className="w-64 h-48 object-contain rounded-xl"

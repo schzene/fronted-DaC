@@ -414,8 +414,7 @@ function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onCl
         <video
           ref={videoRef}
           src="https://image.0xc0de.top/file/1775902333552_1.mp4"
-          autoPlay
-          muted
+          autoPlay      
           playsInline
           onEnded={handleVideoEnd}
           className="w-full rounded-2xl"
