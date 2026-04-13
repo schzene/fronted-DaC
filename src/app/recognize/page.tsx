@@ -242,14 +242,14 @@ export default function RecognizePage() {
                     </p>
                   </div>
 
-                  {result.data.status === 'exact_match' && result.data.result && (
+                  {result.data.status === 'exact_match' && result.data.results && result.data.results.length > 0 && (
                     <div className="mb-6">
                       <div className="bg-blue-50 rounded-xl p-4 mb-4">
                         <p className="text-sm text-blue-600 font-medium">
                           ✓ 精准匹配
                         </p>
                       </div>
-                      {renderArtifactCard(result.data.result, true)}
+                      {renderArtifactCard(result.data.results[0], true)}
                     </div>
                   )}
 

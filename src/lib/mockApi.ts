@@ -50,7 +50,7 @@ export const mockRecognize = async (): Promise<RecognitionResult> => {
       message: 'success',
       data: {
         status: 'exact_match',
-        result: mockArtifacts[randomIndex],
+        results: [mockArtifacts[randomIndex]],
       },
     };
   } else {
