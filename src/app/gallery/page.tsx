@@ -36,7 +36,7 @@ const mockSeries: Series[] = [
       {
         id: 'artifact-1',
         name: '唐三彩骆驼载乐俑',
-        image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20camel%20with%20musicians&size=512x512',
+        image: '/三彩载乐骆驼俑1.png',
         series: '唐三彩陶器',
         description: '三彩陶艺的代表作品，描绘了骆驼载着乐师的场景',
         collected: true,
@@ -269,7 +269,7 @@ export default function GalleryPage() {
                   >
                     <div className="relative">
                       <img
-                        src={artifact.image}
+                        src={artifact.collected ? artifact.image : '/5.png'}
                         alt={artifact.name}
                         className="w-full h-48 object-cover"
                       />
@@ -322,7 +322,7 @@ export default function GalleryPage() {
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="relative">
               <img
-                src={selectedArtifact.image}
+                src={selectedArtifact.collected ? selectedArtifact.image : '/5.png'}
                 alt={selectedArtifact.name}
                 className="w-full h-64 object-cover rounded-t-2xl"
               />
