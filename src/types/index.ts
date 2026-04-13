@@ -3,7 +3,7 @@ export interface Artifact {
   name: string;
   category: string;
   description: string;
-  similarity_percent: number;
+  similarity_percent?: number;
 }
 
 export interface RecognitionResult {
@@ -11,7 +11,6 @@ export interface RecognitionResult {
   message: string;
   data: {
     status: 'exact_match' | 'candidates';
-    result?: Artifact;
     results?: Artifact[];
   };
 }
@@ -27,4 +26,19 @@ export interface UploadState {
   isUploading: boolean;
   result: RecognitionResult | null;
   error: string | null;
+}
+
+export interface DynastyCategory {
+  id: string;
+  name: string;
+  count: string;
+}
+
+export interface ArtifactDetail extends Artifact {
+  image?: string;
+  dynasty?: string;
+  period?: string;
+  material?: string;
+  size?: string;
+  location?: string;
 }

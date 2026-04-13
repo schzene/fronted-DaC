@@ -28,43 +28,37 @@ export default function HomePage() {
   ];
 
   const categories = [
-    { name: '唐代', count: '20件' },
-    { name: '宋代', count: '等待添加' },
-    { name: '元代', count: '等待添加' },
-    { name: '明代', count: '等待添加' },
+    { id: 'tang', name: '唐代', count: '20件' },
+    { id: 'song', name: '宋代', count: '等待添加' },
+    { id: 'yuan', name: '元代', count: '等待添加' },
+    { id: 'ming', name: '明代', count: '等待添加' },
   ];
 
   return (
     <div className="min-h-screen heritage-pattern">
-      <header className="bg-gradient-to-r from-primary-blue/10 to-secondary-blue/10 backdrop-blur-sm border-b border-light-blue/20">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <img src="/logo.jpg" alt="Logo" className="w-12 h-12 rounded-lg object-cover" />
               <div>
-                <h1 className="text-2xl font-bold text-white font-chinese">文物识别系统</h1>
-                <p className="text-sm text-gray-300">文物智能识别平台</p>
+                <h1 className="text-2xl font-bold text-gray-900 font-chinese">文物识别系统</h1>
+                <p className="text-sm text-gray-500">文物智能识别平台</p>
               </div>
             </div>
-            <nav className="flex items-center space-x-6">
-              <Link href="/" className="text-light-blue hover:text-white font-medium">
+            <nav className="flex items-center space-x-4">
+              <Link href="/" className="glass-btn-sm px-5 py-2 text-sm">
                 首页
               </Link>
-              <Link href="/recognize" className="text-gray-300 hover:text-light-blue font-medium">
+              <Link href="/recognize" className="glass-btn-sm px-5 py-2 text-sm">
                 开始识别
               </Link>
-              <Link
-                href="/checkin"
-                className="text-gray-300 hover:text-light-blue font-medium flex items-center space-x-1"
-              >
-                <Calendar className="w-5 h-5" />
+              <Link href="/checkin" className="glass-btn-sm px-5 py-2 text-sm flex items-center space-x-1">
+                <Calendar className="w-4 h-4" />
                 <span>每日签到</span>
               </Link>
-              <Link
-                href="/gallery"
-                className="text-gray-300 hover:text-light-blue font-medium flex items-center space-x-1"
-              >
-                <BookOpen className="w-5 h-5" />
+              <Link href="/gallery" className="glass-btn-sm px-5 py-2 text-sm flex items-center space-x-1">
+                <BookOpen className="w-4 h-4" />
                 <span>文物图鉴</span>
               </Link>
             </nav>
@@ -74,16 +68,16 @@ export default function HomePage() {
 
       <main className="container mx-auto px-4 py-12">
         <section className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-white mb-6 font-chinese">
+          <h2 className="text-5xl font-bold text-gray-900 mb-6 font-chinese">
             数存古韵
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-8">
             文物识别与智慧展示系统，帮助您快速识别和了解珍贵文物
           </p>
           
           <Link
             href="/recognize"
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-primary-blue to-secondary-blue text-white px-8 py-4 rounded-xl text-lg font-medium hover:shadow-lg transition-all transform hover:scale-105"
+            className="glass-btn inline-flex items-center space-x-2 px-8 py-4 text-lg"
           >
             <Camera className="w-6 h-6" />
             <span>立即识别文物</span>
@@ -91,89 +85,91 @@ export default function HomePage() {
         </section>
 
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-center text-white mb-12 font-chinese">
+          <h3 className="text-3xl font-bold text-center text-gray-900 mb-12 font-chinese">
             核心功能
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-dark-blue/50 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all border border-light-blue/20"
+                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all border border-gray-100"
               >
-                <div className="w-14 h-14 bg-gradient-to-br from-primary-blue/20 to-secondary-blue/20 rounded-xl flex items-center justify-center mb-6">
-                  <feature.icon className="w-7 h-7 text-light-blue" />
+                <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6">
+                  <feature.icon className="w-7 h-7 text-blue-500" />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-3 font-chinese">
+                <h4 className="text-xl font-bold text-gray-900 mb-3 font-chinese">
                   {feature.title}
                 </h4>
-                <p className="text-gray-300">{feature.description}</p>
+                <p className="text-gray-500">{feature.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-center text-white mb-12 font-chinese">
+          <h3 className="text-3xl font-bold text-center text-gray-900 mb-12 font-chinese">
             朝代
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {categories.map((category, index) => (
-              <div
-                key={index}
-                className="bg-secondary-blue/20 border border-light-blue/30 rounded-xl p-6 text-center hover:shadow-lg transition-all cursor-pointer"
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                href={`/dynasty/${category.id}`}
+                className="group"
               >
-                <h4 className="text-lg font-bold mb-2 font-chinese text-white">{category.name}</h4>
-                <p className="text-sm opacity-80 text-gray-300">{category.count}</p>
-              </div>
+                <div className="bg-white border border-gray-100 rounded-xl p-6 text-center hover:shadow-lg transition-all cursor-pointer group-hover:border-blue-200 transform hover:scale-105">
+                  <h4 className="text-lg font-bold mb-2 font-chinese text-gray-900 group-hover:text-blue-600 transition-colors">{category.name}</h4>
+                  <p className="text-sm text-gray-400">{category.count}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>
 
-        <section className="bg-dark-blue/50 rounded-2xl p-12 shadow-sm border border-light-blue/20">
-          <h3 className="text-3xl font-bold text-center text-white mb-8 font-chinese">
+        <section className="bg-white rounded-2xl p-12 shadow-sm border border-gray-100">
+          <h3 className="text-3xl font-bold text-center text-gray-900 mb-8 font-chinese">
             使用指南
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-secondary-blue/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-light-blue">1</span>
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-500">1</span>
               </div>
-              <h4 className="text-lg font-bold text-white mb-2 font-chinese">上传图片</h4>
-              <p className="text-gray-300">拍摄或选择文物照片上传</p>
+              <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">上传图片</h4>
+              <p className="text-gray-500">拍摄或选择文物照片上传</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-secondary-blue/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-light-blue">2</span>
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-500">2</span>
               </div>
-              <h4 className="text-lg font-bold text-white mb-2 font-chinese">AI识别</h4>
-              <p className="text-gray-300">系统自动分析识别文物</p>
+              <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">AI识别</h4>
+              <p className="text-gray-500">系统自动分析识别文物</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-secondary-blue/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-light-blue">3</span>
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-500">3</span>
               </div>
-              <h4 className="text-lg font-bold text-white mb-2 font-chinese">查看结果</h4>
-              <p className="text-gray-300">获取详细文物信息和介绍</p>
+              <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">查看结果</h4>
+              <p className="text-gray-500">获取详细文物信息和介绍</p>
             </div>
           </div>
         </section>
       </main>
 
-      {/* 右下角固定视频 */}
       <div className="fixed bottom-8 right-8 z-50">
-        <div className="bg-dark-blue/50 rounded-2xl p-4 shadow-xl border border-light-blue/20 overflow-hidden">
+        <div className="bg-white rounded-2xl p-4 shadow-xl overflow-hidden">
           <video
             src="https://image.0xc0de.top/file/1775901346003_16.mp4"
             autoPlay
             muted
             loop
             playsInline
-            className="w-48 h-32 object-cover rounded-xl"
+            className="w-64 h-48 object-contain rounded-xl"
           />
         </div>
       </div>
       
-      <footer className="bg-gray-900 text-white py-8 mt-16">
+      <footer className="bg-gray-50 text-gray-600 py-8 mt-16 border-t border-gray-100">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
             © 2026 文物识别系统 - 文物智能识别平台

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Heart, ChevronRight, Sparkles, Camera, Calendar, BookOpen, MessageSquare } from 'lucide-react';
+import { Heart, ChevronRight, Sparkles, Camera, Calendar, BookOpen, MessageSquare, Play } from 'lucide-react';
 
 interface Artifact {
   id: string;
@@ -135,15 +135,13 @@ export default function GalleryPage() {
     }
   };
 
-  // 触发集齐动画 - 在这里可以轻松替换为您想要的动画
   const triggerCompletionAnimation = () => {
     setShowAnimation(true);
     setTimeout(() => setShowAnimation(false), 180000);
   };
 
-  // 手动测试动画按钮（仅用于测试）
-  const testAnimation = () => {
-    setCompletedSeriesName('测试套系');
+  const testAnimation = (seriesName: string) => {
+    setCompletedSeriesName(seriesName);
     triggerCompletionAnimation();
   };
 
@@ -180,35 +178,35 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen heritage-pattern">
-      <header className="bg-gradient-to-r from-primary-blue/20 to-secondary-blue/20 backdrop-blur-sm border-b border-light-blue/20">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
               <img src="/logo.jpg" alt="Logo" className="w-12 h-12 rounded-lg object-cover" />
               <div>
-                <h1 className="text-2xl font-bold text-white font-chinese">文物识别系统</h1>
-                <p className="text-sm text-gray-300">文物智能识别平台</p>
+                <h1 className="text-2xl font-bold text-gray-900 font-chinese">文物识别系统</h1>
+                <p className="text-sm text-gray-500">文物智能识别平台</p>
               </div>
             </Link>
-            <nav className="flex items-center space-x-6">
-              <Link href="/" className="text-gray-300 hover:text-light-blue font-medium">
+            <nav className="flex items-center space-x-4">
+              <Link href="/" className="glass-btn-sm px-5 py-2 text-sm">
                 首页
               </Link>
-              <Link href="/recognize" className="text-gray-300 hover:text-light-blue font-medium">
+              <Link href="/recognize" className="glass-btn-sm px-5 py-2 text-sm">
                 开始识别
               </Link>
               <Link
                 href="/checkin"
-                className="text-gray-300 hover:text-light-blue font-medium flex items-center space-x-1"
+                className="glass-btn-sm px-5 py-2 text-sm flex items-center space-x-1"
               >
-                <Calendar className="w-5 h-5" />
+                <Calendar className="w-4 h-4" />
                 <span>每日签到</span>
               </Link>
               <Link
                 href="/gallery"
-                className="bg-primary-blue hover:bg-secondary-blue text-white px-6 py-2 rounded-lg transition-colors font-medium flex items-center space-x-1"
+                className="glass-btn px-6 py-2 text-sm flex items-center space-x-1"
               >
-                <BookOpen className="w-5 h-5" />
+                <BookOpen className="w-4 h-4" />
                 <span>文物图鉴</span>
               </Link>
             </nav>
@@ -218,22 +216,14 @@ export default function GalleryPage() {
 
       <main className="container mx-auto px-4 py-12">
         <section className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-6 font-chinese">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 font-chinese">
             文物图鉴收藏
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-4">
+          <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-4">
             收藏文物图片，查看套系集齐情况，参与互动评论
           </p>
-          <button
-            onClick={testAnimation}
-            className="bg-secondary-blue hover:bg-primary-blue text-white px-6 py-2 rounded-lg transition-colors text-sm"
-          >
-            🔍 测试集齐动画
-          </button>
         </section>
 
-        {/* ========== 集齐动画区域 ========== */}
-        {/* 在这里可以轻松替换为您想要的动画效果 */}
         {showAnimation && (
           <CompletionAnimation 
             seriesName={completedSeriesName}
@@ -243,15 +233,25 @@ export default function GalleryPage() {
 
         <div className="space-y-12">
           {series.map((s) => (
-            <div key={s.id} className="bg-dark-blue/50 rounded-2xl p-8 border border-light-blue/20">
+            <div key={s.id} className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-white font-chinese">
-                  {s.name}
-                </h3>
+                <div className="flex items-center space-x-3">
+                  <h3 className="text-2xl font-bold text-gray-900 font-chinese">
+                    {s.name}
+                  </h3>
+                  <button
+                    onClick={() => testAnimation(s.name)}
+                    className="glass-btn-sm px-3 py-1.5 text-xs flex items-center space-x-1"
+                    title="测试集齐动画"
+                  >
+                    <Play className="w-3.5 h-3.5" />
+                    <span>集齐动画</span>
+                  </button>
+                </div>
                 <div className={`px-4 py-2 rounded-full text-sm font-medium ${
                   s.completed
-                    ? 'bg-green-500/20 text-green-300 border border-green-500/30'
-                    : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                    ? 'bg-green-50 text-green-600 border border-green-200'
+                    : 'bg-yellow-50 text-yellow-600 border border-yellow-200'
                 }`}>
                   {s.completed ? '已集齐' : `已收集 ${s.artifacts.filter(a => a.collected).length}/${s.artifacts.length}`}
                 </div>
@@ -261,10 +261,10 @@ export default function GalleryPage() {
                 {s.artifacts.map((artifact) => (
                   <div
                     key={artifact.id}
-                    className={`rounded-xl overflow-hidden border transition-all ${
+                    className={`rounded-xl overflow-hidden border transition-all bg-white ${
                       artifact.collected
-                        ? 'border-light-blue/50 hover:shadow-lg hover:shadow-light-blue/20'
-                        : 'border-gray-700/50 opacity-70'
+                        ? 'border-blue-200 hover:shadow-lg hover:shadow-blue-100'
+                        : 'border-gray-100 opacity-70'
                     }`}
                   >
                     <div className="relative">
@@ -288,20 +288,20 @@ export default function GalleryPage() {
                         />
                       </button>
                     </div>
-                    <div className="p-4 bg-dark-blue/80">
-                      <h4 className="text-lg font-bold text-white mb-2 font-chinese">
+                    <div className="p-4 bg-white">
+                      <h4 className="text-lg font-bold text-gray-900 mb-2 font-chinese">
                         {artifact.name}
                       </h4>
-                      <p className="text-sm text-gray-300 mb-4 line-clamp-2">
+                      <p className="text-sm text-gray-500 mb-4 line-clamp-2">
                         {artifact.description}
                       </p>
                       <div className="flex items-center justify-between">
                         <button
                           onClick={() => setSelectedArtifact(artifact)}
-                          className="flex items-center space-x-1 text-light-blue hover:text-white text-sm"
+                          className="glass-btn-sm px-3 py-1.5 text-xs flex items-center space-x-1"
                         >
                           <span>查看详情</span>
-                          <ChevronRight className="w-4 h-4" />
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </button>
                         <span className="text-xs text-gray-400 flex items-center space-x-1">
                           <MessageSquare className="w-3 h-3" />
@@ -318,8 +318,8 @@ export default function GalleryPage() {
       </main>
 
       {selectedArtifact && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-dark-blue rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="relative">
               <img
                 src={selectedArtifact.image}
@@ -328,30 +328,30 @@ export default function GalleryPage() {
               />
               <button
                 onClick={() => setSelectedArtifact(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors"
               >
                 ×
               </button>
             </div>
             <div className="p-6">
-              <h3 className="text-2xl font-bold text-white mb-2 font-chinese">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 font-chinese">
                 {selectedArtifact.name}
               </h3>
-              <p className="text-gray-300 mb-6">{selectedArtifact.description}</p>
+              <p className="text-gray-500 mb-6">{selectedArtifact.description}</p>
               
-              <h4 className="text-lg font-bold text-white mb-4 font-chinese">
+              <h4 className="text-lg font-bold text-gray-900 mb-4 font-chinese">
                 评论 ({selectedArtifact.comments.length})
               </h4>
               
               <div className="space-y-4 mb-6">
                 {selectedArtifact.comments.length > 0 ? (
                   selectedArtifact.comments.map((comment) => (
-                    <div key={comment.id} className="bg-dark-blue/50 p-4 rounded-lg">
+                    <div key={comment.id} className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                       <div className="flex justify-between items-start mb-2">
-                        <span className="font-medium text-white">{comment.user}</span>
+                        <span className="font-medium text-gray-900">{comment.user}</span>
                         <span className="text-xs text-gray-400">{comment.createdAt}</span>
                       </div>
-                      <p className="text-gray-300">{comment.content}</p>
+                      <p className="text-gray-600">{comment.content}</p>
                     </div>
                   ))
                 ) : (
@@ -365,11 +365,11 @@ export default function GalleryPage() {
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="写下你的评论..."
-                  className="flex-1 bg-dark-blue/50 border border-light-blue/30 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-light-blue/50"
+                  className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300"
                 />
                 <button
                   onClick={() => handleAddComment(selectedArtifact.id)}
-                  className="bg-secondary-blue hover:bg-primary-blue text-white px-4 py-2 rounded-lg transition-colors"
+                  className="glass-btn-sm px-4 py-2"
                 >
                   发送
                 </button>
@@ -379,7 +379,7 @@ export default function GalleryPage() {
         </div>
       )}
 
-      <footer className="bg-gray-900 text-white py-8 mt-16">
+      <footer className="bg-gray-50 text-gray-600 py-8 mt-16 border-t border-gray-100">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
             © 2026 文物识别系统 - 文物智能识别平台
@@ -390,8 +390,6 @@ export default function GalleryPage() {
   );
 }
 
-// ========== 集齐动画组件 ==========
-// 您可以轻松在这里替换成自己想要的动画效果
 function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onClose: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -408,12 +406,11 @@ function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onCl
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={onClose}>
       <div 
-        className="bg-black rounded-3xl p-4 max-w-5xl w-full mx-4 shadow-2xl overflow-hidden"
+        className="bg-white rounded-3xl p-4 max-w-5xl w-full mx-4 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 视频动画区域 */}
         <video
           ref={videoRef}
           src="https://image.0xc0de.top/file/1775902333552_1.mp4"
@@ -424,18 +421,17 @@ function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onCl
           className="w-full rounded-2xl"
         />
 
-        {/* 文字和按钮层（可选，如果视频已经包含内容可以去掉） */}
         <div className="p-6 text-center">
-          <h3 className="text-2xl font-bold text-white mb-2 font-chinese">
+          <h3 className="text-2xl font-bold text-gray-900 mb-2 font-chinese">
             🎉 套系集齐！
           </h3>
-          <p className="text-lg text-gray-300 mb-4 font-chinese">
+          <p className="text-lg text-gray-500 mb-4 font-chinese">
             {seriesName}
           </p>
           
           <button
             onClick={onClose}
-            className="bg-primary-blue hover:bg-secondary-blue text-white px-8 py-3 rounded-xl font-bold text-lg transition-all transform hover:scale-105"
+            className="glass-btn px-8 py-3 text-lg"
           >
             关闭
           </button>
