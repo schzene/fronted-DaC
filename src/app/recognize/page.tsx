@@ -236,35 +236,18 @@ export default function RecognizePage() {
                       识别结果
                     </h3>
                     <p className="text-gray-500">
-                      {result.data.status === 'exact_match'
-                        ? '找到精准匹配的文物'
-                        : '为您推荐以下相似文物'}
+                      找到最相似的文物
                     </p>
                   </div>
 
-                  {result.data.status === 'exact_match' && result.data.results && result.data.results.length > 0 && (
-                    <div className="mb-6">
+                  {result.data.results && result.data.results.length > 0 && (
+                    <div>
                       <div className="bg-blue-50 rounded-xl p-4 mb-4">
                         <p className="text-sm text-blue-600 font-medium">
-                          ✓ 精准匹配
+                          ✓ 最佳匹配
                         </p>
                       </div>
                       {renderArtifactCard(result.data.results[0], true)}
-                    </div>
-                  )}
-
-                  {result.data.results && result.data.results.length > 0 && (
-                    <div>
-                      <h4 className="text-lg font-bold text-gray-900 mb-4 font-chinese">
-                        相似文物推荐
-                      </h4>
-                      <div className="space-y-4">
-                        {result.data.results.map((artifact, index) => (
-                          <div key={artifact.id}>
-                            {renderArtifactCard(artifact, index === 0)}
-                          </div>
-                        ))}
-                      </div>
                     </div>
                   )}
                 </div>

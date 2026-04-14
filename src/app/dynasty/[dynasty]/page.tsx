@@ -1,53 +1,55 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Database, Sparkles, Calendar, BookOpen } from 'lucide-react';
-
-const dynastyData: Record<string, {
-  name: string;
-  categories: Array<{
-    id: string;
-    name: string;
-    count: number;
-    description: string;
-  }>;
-}> = {
-  tang: {
-    name: '唐代',
-    categories: [
-      { id: 'TGS', name: '唐三彩', count: 7, description: '唐代三彩釉陶器，包括人物俑、动物俑等' },
-      { id: 'BH', name: '壁画', count: 5, description: '唐代墓葬壁画，展现当时艺术水平' },
-      { id: 'YQ', name: '玉器', count: 5, description: '精美玉器，工艺精湛' },
-      { id: 'JYQ', name: '金银器', count: 5, description: '金银器皿和饰品' },
-    ],
-  },
-  song: {
-    name: '宋代',
-    categories: [],
-  },
-  yuan: {
-    name: '元代',
-    categories: [],
-  },
-  ming: {
-    name: '明代',
-    categories: [],
-  },
-};
+import { getDynastyDetail, CategoryInfo, DynastyInfo } from '@/lib/api';
 
 export default function DynastyPage() {
   const params = useParams();
   const router = useRouter();
   const dynastyId = params.dynasty as string;
-  
-  const dynasty = dynastyData[dynastyId];
-  
-  if (!dynasty) {
+
+  const [dynasty, setDynasty] = useState<(DynastyInfo & { categories: CategoryInfo[] }) | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const res = await getDynastyDetail(dynastyId);
+        if (res.code === 0) {
+          setDynasty(res.data);
+        } else {
+          setError('朝代不存在');
+        }
+      } catch {
+        setError('加载失败，请检查后端服务是否启动');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [dynastyId]);
+
+  if (loading) {
     return (
       <div className="min-h-screen heritage-pattern flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">朝代不存在</h1>
+          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !dynasty) {
+    return (
+      <div className="min-h-screen heritage-pattern flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{error || '朝代不存在'}</h1>
           <Link href="/" className="glass-btn-sm px-5 py-2 text-sm">返回首页</Link>
         </div>
       </div>
@@ -107,7 +109,7 @@ export default function DynastyPage() {
               {dynasty.categories.map((category) => (
                 <Link
                   key={category.id}
-                  href={`/dynasty/${dynastyId}/category/${category.id}`}
+                  href={`/dynasty/${dynastyId}/${category.id}`}
                   className="group"
                 >
                   <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all border border-gray-100 hover:border-blue-200 transform hover:scale-105 h-full">
@@ -120,7 +122,7 @@ export default function DynastyPage() {
                     <p className="text-gray-400 mb-4 line-clamp-2">{category.description}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-blue-500 font-medium">
-                        {category.count} 件文物
+                        {category.artifact_count} 件文物
                       </span>
                       <span className="text-xs text-gray-400">点击查看 →</span>
                     </div>

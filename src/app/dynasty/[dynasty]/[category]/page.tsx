@@ -1,66 +1,58 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Eye, BookOpen } from 'lucide-react';
+import { getCategoryDetail, ArtifactListItem, CategoryInfo } from '@/lib/api';
 
-const categoryData: Record<string, {
-  name: string;
-  dynasty: string;
-  artifacts: Array<{
-    id: number;
-    name: string;
-    description: string;
-    image?: string;
-  }>;
-}> = {
-  TGS: {
-    name: '唐三彩',
-    dynasty: '唐代',
-    artifacts: [
-      { id: 10, name: '鹦鹉莲瓣纹金碗', description: '精美的唐代金碗，鹦鹉莲瓣纹装饰', image: '/placeholder.jpg' },
-      { id: 11, name: '桃形花结八瓣银高足杯', description: '唐代银器精品，桃形花结装饰', image: '/placeholder.jpg' },
-      { id: 14, name: '鎏金鹦鹉纹提梁银罐', description: '唐代银罐，鎏金工艺精湛', image: '/placeholder.jpg' },
-    ],
-  },
-  BH: {
-    name: '壁画',
-    dynasty: '唐代',
-    artifacts: [
-      { id: 20, name: '飞天壁画', description: '唐代飞天壁画，展现佛教艺术', image: '/placeholder.jpg' },
-      { id: 21, name: '狩猎图壁画', description: '唐代贵族狩猎场景', image: '/placeholder.jpg' },
-    ],
-  },
-  YQ: {
-    name: '玉器',
-    dynasty: '唐代',
-    artifacts: [
-      { id: 30, name: '白玉龙纹佩', description: '精美玉佩，龙纹雕刻', image: '/placeholder.jpg' },
-    ],
-  },
-  JYQ: {
-    name: '金银器',
-    dynasty: '唐代',
-    artifacts: [
-      { id: 40, name: '金步摇', description: '唐代女性饰品', image: '/placeholder.jpg' },
-      { id: 41, name: '银香囊', description: '唐代香具', image: '/placeholder.jpg' },
-    ],
-  },
-};
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dac-backend-list.vercel.app';
 
 export default function CategoryPage() {
   const params = useParams();
   const router = useRouter();
   const dynastyId = params.dynasty as string;
   const categoryId = params.category as string;
-  
-  const category = categoryData[categoryId];
-  
-  if (!category) {
+
+  const [category, setCategory] = useState<(CategoryInfo & { dynasty_name: string; artifacts: ArtifactListItem[] }) | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const res = await getCategoryDetail(categoryId);
+        if (res.code === 0) {
+          setCategory(res.data);
+        } else {
+          setError('文物类别不存在');
+        }
+      } catch {
+        setError('加载失败，请检查后端服务是否启动');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [categoryId]);
+
+  if (loading) {
     return (
       <div className="min-h-screen heritage-pattern flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">文物类别不存在</h1>
+          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !category) {
+    return (
+      <div className="min-h-screen heritage-pattern flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{error || '文物类别不存在'}</h1>
           <Link href="/" className="glass-btn-sm px-5 py-2 text-sm">返回首页</Link>
         </div>
       </div>
@@ -101,7 +93,7 @@ export default function CategoryPage() {
           <div className="text-center mb-12">
             <h2 className="text-5xl font-bold text-gray-900 mb-4 font-chinese">{category.name}</h2>
             <p className="text-xl text-gray-500 max-w-3xl mx-auto">
-              {category.dynasty}{category.name}文物共 {category.artifacts.length} 件
+              {category.dynasty_name}{category.name}文物共 {category.artifacts.length} 件
             </p>
           </div>
 
@@ -116,14 +108,20 @@ export default function CategoryPage() {
               {category.artifacts.map((artifact) => (
                 <Link
                   key={artifact.id}
-                  href={`/dynasty/${dynastyId}/category/${categoryId}/artifact/${artifact.id}`}
+                  href={`/dynasty/${dynastyId}/${categoryId}/${Number(artifact.id)}`}
                   className="group"
                 >
                   <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100 hover:border-blue-200 transform hover:scale-105 h-full">
                     <div className="aspect-square bg-gradient-to-br from-blue-50 to-blue-100/50 flex items-center justify-center overflow-hidden">
-                      <div className="w-full h-full bg-blue-50 flex items-center justify-center">
+                      {artifact.image ? (
+                        <img
+                          src={`${API_BASE_URL}${artifact.image}`}
+                          alt={artifact.name}
+                          className="w-full h-full object-contain bg-gray-50"
+                        />
+                      ) : (
                         <span className="text-6xl text-blue-200">🏺</span>
-                      </div>
+                      )}
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-gray-900 mb-2 font-chinese group-hover:text-blue-600 transition-colors">

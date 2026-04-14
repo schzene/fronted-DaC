@@ -1,63 +1,65 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, MapPin, Ruler, Gem } from 'lucide-react';
+import { getArtifactDetail, ArtifactDetailFull } from '@/lib/api';
 
-const artifactsData: Record<string, {
-  name: string;
-  category: string;
-  dynasty: string;
-  description: string;
-  period: string;
-  material: string;
-  size: string;
-  location: string;
-}> = {
-  '10': {
-    name: '鹦鹉莲瓣纹金碗',
-    category: '唐三彩',
-    dynasty: '唐代',
-    description: '这件金碗采用精湛的锤揲工艺，碗身装饰有精美的鹦鹉和莲瓣纹样。鹦鹉栩栩如生，莲瓣层次分明，展现了唐代金银器制作的高超技艺。金碗整体造型优雅，是唐代贵族生活中的珍贵器物。',
-    period: '公元8世纪（盛唐时期）',
-    material: '黄金',
-    size: '口径12.5厘米，高6.8厘米，重325克',
-    location: '陕西西安何家村窖藏出土',
-  },
-  '11': {
-    name: '桃形花结八瓣银高足杯',
-    category: '唐三彩',
-    dynasty: '唐代',
-    description: '此银高足杯造型独特，杯身呈桃形，饰有精美花结图案。八瓣设计体现了唐代对对称美的追求。高足设计不仅美观，更便于持握和使用。',
-    period: '公元8世纪中叶',
-    material: '纯银',
-    size: '口径8.2厘米，高10.5厘米',
-    location: '陕西西安出土',
-  },
-  '14': {
-    name: '鎏金鹦鹉纹提梁银罐',
-    category: '唐三彩',
-    dynasty: '唐代',
-    description: '银罐通体鎏金，罐身装饰有生动的鹦鹉纹样。提梁设计方便携带，罐体密封性好，可用于储存珍贵物品。鹦鹉在唐代被视为吉祥之鸟，寓意美好。',
-    period: '公元8-9世纪',
-    material: '银质鎏金',
-    size: '高15.5厘米，腹径12厘米',
-    location: '陕西法门寺地宫出土',
-  },
-};
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dac-backend-list.vercel.app';
 
 export default function ArtifactDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const artifactId = params.id as string;
-  
-  const artifact = artifactsData[artifactId];
-  
-  if (!artifact) {
+  const artifactId = Number(params.id as string);
+
+  const [artifact, setArtifact] = useState<ArtifactDetailFull | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        
+        // 验证文物ID是否有效
+        if (isNaN(artifactId) || artifactId <= 0) {
+          setError('无效的文物ID');
+          return;
+        }
+        
+        const res = await getArtifactDetail(artifactId);
+        if (res.code === 0) {
+          setArtifact(res.data);
+        } else {
+          setError('文物不存在');
+        }
+      } catch {
+        setError('加载失败，请检查后端服务是否启动');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [artifactId]);
+
+  if (loading) {
     return (
       <div className="min-h-screen heritage-pattern flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">文物不存在</h1>
+          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !artifact) {
+    return (
+      <div className="min-h-screen heritage-pattern flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{error || '文物不存在'}</h1>
           <Link href="/" className="glass-btn-sm px-5 py-2 text-sm">返回首页</Link>
         </div>
       </div>
@@ -96,10 +98,39 @@ export default function ArtifactDetailPage() {
       <main className="container mx-auto px-4 py-12">
         <section className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm flex items-center justify-center min-h-[500px]">
-              <div className="w-full h-full bg-blue-50 rounded-xl flex items-center justify-center">
+            <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center justify-center min-h-[500px]">
+              {artifact.images && artifact.images.length > 0 ? (
+                <div className="w-full">
+                  <div className="bg-gray-50 rounded-xl flex items-center justify-center min-h-[400px] overflow-hidden">
+                    <img
+                      src={`${API_BASE_URL}${artifact.images[currentImageIndex]}`}
+                      alt={artifact.name}
+                      className="max-w-full max-h-[400px] object-contain"
+                    />
+                  </div>
+                  {artifact.images.length > 1 && (
+                    <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                      {artifact.images.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentImageIndex(idx)}
+                          className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                            idx === currentImageIndex ? 'border-blue-500' : 'border-gray-200 hover:border-blue-300'
+                          }`}
+                        >
+                          <img
+                            src={`${API_BASE_URL}${img}`}
+                            alt={`${artifact.name} ${idx + 1}`}
+                            className="w-full h-full object-contain bg-gray-50"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
                 <span className="text-9xl text-blue-200">🏺</span>
-              </div>
+              )}
             </div>
 
             <div className="space-y-6">
@@ -107,10 +138,10 @@ export default function ArtifactDetailPage() {
                 <h2 className="text-4xl font-bold text-gray-900 mb-4 font-chinese">{artifact.name}</h2>
                 <div className="flex flex-wrap gap-3 mb-6">
                   <span className="glass-btn-sm px-4 py-2 text-sm">
-                    {artifact.dynasty}
+                    {artifact.dynasty_name}
                   </span>
                   <span className="glass-btn-sm px-4 py-2 text-sm">
-                    {artifact.category}
+                    {artifact.category_name}
                   </span>
                 </div>
               </div>
@@ -118,63 +149,70 @@ export default function ArtifactDetailPage() {
               <p className="text-gray-600 leading-relaxed text-lg">{artifact.description}</p>
 
               <div className="space-y-4 pt-6 border-t border-gray-100">
-                <div className="flex items-start space-x-4">
-                  <Calendar className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">年代</h4>
-                    <p className="text-gray-500">{artifact.period}</p>
+                {artifact.period && (
+                  <div className="flex items-start space-x-4">
+                    <Calendar className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">年代</h4>
+                      <p className="text-gray-500">{artifact.period}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-start space-x-4">
-                  <Gem className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">材质</h4>
-                    <p className="text-gray-500">{artifact.material}</p>
+                {artifact.material && (
+                  <div className="flex items-start space-x-4">
+                    <Gem className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">材质</h4>
+                      <p className="text-gray-500">{artifact.material}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-start space-x-4">
-                  <Ruler className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">尺寸</h4>
-                    <p className="text-gray-500">{artifact.size}</p>
+                {artifact.size && (
+                  <div className="flex items-start space-x-4">
+                    <Ruler className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">尺寸</h4>
+                      <p className="text-gray-500">{artifact.size}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-start space-x-4">
-                  <MapPin className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">出土地点</h4>
-                    <p className="text-gray-500">{artifact.location}</p>
+                {artifact.location && (
+                  <div className="flex items-start space-x-4">
+                    <MapPin className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">出土地点</h4>
+                      <p className="text-gray-500">{artifact.location}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 font-chinese">相关文物</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {Object.entries(artifactsData)
-                .filter(([id]) => id !== artifactId)
-                .slice(0, 3)
-                .map(([id, item]) => (
+          {artifact.related && artifact.related.length > 0 && (
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 font-chinese">相关文物</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {artifact.related.map((item) => (
                   <Link
-                    key={id}
-                    href={`/dynasty/tang/category/TGS/artifact/${id}`}
+                    key={item.id}
+                    href={`/dynasty/${artifact.dynasty_id}/${artifact.category_id}/${item.id}`}
                     className="group"
                   >
                     <div className="bg-gray-50 rounded-xl p-6 hover:bg-blue-50 transition-all border border-gray-100 hover:border-blue-200">
                       <h4 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2 font-chinese">
                         {item.name}
                       </h4>
-                      <p className="text-sm text-gray-400 line-clamp-2">{item.category} · {item.dynasty}</p>
+                      <p className="text-sm text-gray-400 line-clamp-2">{artifact.category_name} · {artifact.dynasty_name}</p>
                     </div>
                   </Link>
                 ))}
+              </div>
             </div>
-          </div>
+          )}
         </section>
       </main>
 
