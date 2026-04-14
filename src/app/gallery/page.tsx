@@ -31,7 +31,7 @@ interface Series {
 const mockSeries: Series[] = [
   {
     id: 'series-1',
-    name: '唐三彩陶器',
+    name: '驼铃声声',
     artifacts: [
       {
         id: 'artifact-1',
