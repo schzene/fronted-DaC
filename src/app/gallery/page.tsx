@@ -3,12 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Heart, ChevronRight, Sparkles, Camera, Calendar, BookOpen, MessageSquare, Play } from 'lucide-react';
+import { getCategories, getCategoryDetail, getArtifactDetail } from '@/lib/api';
+import type { CategoriesResponse } from '@/types';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-dc.0xc0de.top:34859';
 
 interface Artifact {
-  id: string;
+  id: number;
   name: string;
   image: string;
-  series: string;
+  category: string;
   description: string;
   collected: boolean;
   comments: Comment[];
@@ -28,86 +32,63 @@ interface Series {
   completed: boolean;
 }
 
-const mockSeries: Series[] = [
-  {
-    id: 'series-1',
-    name: '驼铃声声',
-    artifacts: [
-      {
-        id: 'artifact-1',
-        name: '唐三彩骆驼载乐俑',
-        image: '/3.png',
-        series: '唐三彩陶器',
-        description: '骆驼昂首挺立，驮载了5个汉、 胡成年男子。中间一个胡人在跳舞，其余4人围坐演奏。他们手中的乐器仅残留下一把琵琶，据夏鼐先生研究， 应该是一人拨奏琵琶，一人吹筚篥，二人击鼓，均属胡乐。骆驼载乐陶俑巧妙地夸张了人与驼的比例，造型优美生动，釉色鲜明润泽，代表了唐三彩的最高水平。载乐骆驼陶俑表现的应该是长安百戏中的一个杂技节目。唐代百戏留下记载的有盘杯伎、吞剑伎、猕猴缘竿伎、透飞梯伎等。当时，在长安城的东市和西市都有专门的百戏班子，他们除自主演出外， 也可让人们花钱雇演。唐玄宗曾“召两市杂戏以娱贵妃”。骆驼载乐节目集杂技和马戏于一体，有两个看点。其一，双峰骆驼身高一般2米左右， 负载力可以达到250公斤， 驮载5个成年男子需训练有素。其二，5位艺人在驼背没有围栏的平台上载歌载舞所展现的高难度技艺。唐代高空平衡技巧的表演水平很高， 幽州胡女石火胡能站在十层叠放的彩绘坐床上如履平地。唐人的驯兽水平也不一般，披挂华丽的马匹会在玄宗生日时，为他衔杯祝寿，甚至还有舞象、舞犀这种大型动物的演出。所以，骆驼载乐这种节目，在长安一定大受欢迎，西安中堡子村唐墓也出土过类似的作品。唐时，中亚有许多乐师、歌舞者留住长安城内，唐高祖曾拜中工安国出生而长居长安的安叱奴为散骑常侍。曹国人曹保及其子善才、孙曹纲都是蜚声艺林的琵琶名手。宪宗元和时，西域米国人米嘉荣曾为唐朝廷供奉。是歌曲名家。玄宗开元时，康国、史国均造使献胡旋女子。南亚、东亚诸国中的骠国、扶南，以及日本也有很多乐工旅居长安，带来了很多新的乐曲和乐器。',
-        collected: true,
-        comments: [
-          {
-            id: 'comment-1',
-            user: '文物爱好者',
-            content: '这件文物非常精美，展现了艺术水平',
-            createdAt: '2026-01-01',
-          },
-        ],
-      },
-      {
-        id: 'artifact-2',
-        name: '唐三彩马',
-        image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20horse&size=512x512',
-        series: '唐三彩陶器',
-        description: '三彩陶马，造型生动，色彩艳丽',
-        collected: false,
-        comments: [],
-      },
-      {
-        id: 'artifact-3',
-        name: '唐三彩仕女俑',
-        image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20tri-colored%20pottery%20female%20figure&size=512x512',
-        series: '唐三彩陶器',
-        description: '三彩陶仕女俑，展现了女性的服饰和姿态',
-        collected: false,
-        comments: [],
-      },
-    ],
-    completed: false,
-  },
-  {
-    id: 'series-2',
-    name: '壁画',
-    artifacts: [
-      {
-        id: 'artifact-4',
-        name: '飞天壁画',
-        image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20flying%20Apsara%20mural&size=512x512',
-        series: '壁画',
-        description: '敦煌壁画中的飞天形象，轻盈飘逸',
-        collected: false,
-        comments: [],
-      },
-      {
-        id: 'artifact-5',
-        name: '狩猎图壁画',
-        image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Tang%20Dynasty%20hunting%20scene%20mural&size=512x512',
-        series: '壁画',
-        description: '壁画中的狩猎场景，展现了当时的生活',
-        collected: false,
-        comments: [],
-      },
-    ],
-    completed: false,
-  },
-];
-
 export default function GalleryPage() {
-  const [series, setSeries] = useState<Series[]>(mockSeries);
+  const [series, setSeries] = useState<Series[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   const [newComment, setNewComment] = useState('');
   const [showAnimation, setShowAnimation] = useState(false);
   const [completedSeriesName, setCompletedSeriesName] = useState('');
 
-  const handleToggleCollect = (artifactId: string) => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const catRes = await getCategories();
+      const categories = catRes.data;
+
+      const seriesList: Series[] = [];
+
+      for (const cat of categories) {
+        try {
+          const detailRes = await getCategoryDetail(cat.id);
+          const artifacts = detailRes.data.artifacts || [];
+
+          const mapped: Artifact[] = artifacts.map((a: any) => ({
+            id: a.id,
+            name: a.name,
+            image: a.image ? `${API_BASE_URL}${a.image}` : '/5.png',
+            category: cat.name,
+            description: a.description || '',
+            collected: false,
+            comments: [],
+          }));
+
+          seriesList.push({
+            id: cat.id,
+            name: cat.name,
+            artifacts: mapped,
+            completed: false,
+          });
+        } catch (err) {
+          console.error(`Failed to load category ${cat.id}:`, err);
+        }
+      }
+
+      setSeries(seriesList);
+    } catch (err) {
+      console.error('Failed to load categories:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleCollect = (artifactId: number) => {
     let seriesThatWasCompleted = null;
     let completedName = '';
-    
+
     setSeries(prevSeries =>
       prevSeries.map(s => {
         const newArtifacts = s.artifacts.map(a =>
@@ -115,12 +96,12 @@ export default function GalleryPage() {
         );
         const wasNotCompleted = !s.completed;
         const isNowCompleted = newArtifacts.every(a => a.collected);
-        
+
         if (wasNotCompleted && isNowCompleted) {
           seriesThatWasCompleted = s.id;
           completedName = s.name;
         }
-        
+
         return {
           ...s,
           artifacts: newArtifacts,
@@ -128,7 +109,7 @@ export default function GalleryPage() {
         };
       })
     );
-    
+
     if (seriesThatWasCompleted) {
       setCompletedSeriesName(completedName);
       triggerCompletionAnimation();
@@ -145,7 +126,7 @@ export default function GalleryPage() {
     triggerCompletionAnimation();
   };
 
-  const handleAddComment = (artifactId: string) => {
+  const handleAddComment = (artifactId: number) => {
     if (!newComment.trim()) return;
 
     setSeries(prevSeries =>
@@ -174,7 +155,16 @@ export default function GalleryPage() {
     setSelectedArtifact(null);
   };
 
-
+  if (loading) {
+    return (
+      <div className="min-h-screen heritage-pattern flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500 text-lg">加载文物图鉴中...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen heritage-pattern">
@@ -225,7 +215,7 @@ export default function GalleryPage() {
         </section>
 
         {showAnimation && (
-          <CompletionAnimation 
+          <CompletionAnimation
             seriesName={completedSeriesName}
             onClose={() => setShowAnimation(false)}
           />
@@ -323,7 +313,7 @@ export default function GalleryPage() {
             <div className="relative">
               <div className="bg-gray-50 w-full h-64 flex items-center justify-center rounded-t-2xl overflow-hidden">
                 <img
-                  src={selectedArtifact.collected ? selectedArtifact.image : '/5.png'}
+                  src={selectedArtifact.image}
                   alt={selectedArtifact.name}
                   className="max-w-full max-h-full object-contain"
                 />
@@ -340,11 +330,11 @@ export default function GalleryPage() {
                 {selectedArtifact.name}
               </h3>
               <p className="text-gray-500 mb-6">{selectedArtifact.description}</p>
-              
+
               <h4 className="text-lg font-bold text-gray-900 mb-4 font-chinese">
                 评论 ({selectedArtifact.comments.length})
               </h4>
-              
+
               <div className="space-y-4 mb-6">
                 {selectedArtifact.comments.length > 0 ? (
                   selectedArtifact.comments.map((comment) => (
@@ -360,7 +350,7 @@ export default function GalleryPage() {
                   <p className="text-gray-400">暂无评论，快来发表第一条评论吧！</p>
                 )}
               </div>
-              
+
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -409,14 +399,14 @@ function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onCl
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={onClose}>
-      <div 
+      <div
         className="bg-white rounded-3xl p-4 max-w-5xl w-full mx-4 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <video
           ref={videoRef}
           src="https://image.0xc0de.top/file/1775902333552_1.mp4"
-          autoPlay      
+          autoPlay
           playsInline
           onEnded={handleVideoEnd}
           className="w-full rounded-2xl"
@@ -429,7 +419,7 @@ function CompletionAnimation({ seriesName, onClose }: { seriesName: string; onCl
           <p className="text-lg text-gray-500 mb-4 font-chinese">
             {seriesName}
           </p>
-          
+
           <button
             onClick={onClose}
             className="glass-btn px-8 py-3 text-lg"

@@ -70,6 +70,11 @@ export const mockGetCategories = async (): Promise<CategoriesResponse> => {
 
   return {
     code: 0,
-    data: ['唐代唐三彩陶器', '唐代壁画', '唐代玉器', '唐金银器'],
+    data: [
+      { id: 'TDT', name: '唐三彩', dynasty_id: 'tang', description: '', artifact_count: 5 },
+      { id: 'TDM', name: '壁画', dynasty_id: 'tang', description: '', artifact_count: 7 },
+      { id: 'TDJ', name: '玉器', dynasty_id: 'tang', description: '', artifact_count: 5 },
+      { id: 'TGS', name: '金银器', dynasty_id: 'tang', description: '', artifact_count: 5 },
+    ],
   };
 };

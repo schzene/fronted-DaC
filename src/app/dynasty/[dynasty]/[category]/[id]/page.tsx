@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Calendar, MapPin, Ruler, Gem } from 'lucide-react';
 import { getArtifactDetail, ArtifactDetailFull } from '@/lib/api';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dac-backend-list.vercel.app';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-dc.0xc0de.top:34859';
 
 export default function ArtifactDetailPage() {
   const params = useParams();
@@ -99,34 +99,15 @@ export default function ArtifactDetailPage() {
         <section className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
             <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center justify-center min-h-[500px]">
-              {artifact.images && artifact.images.length > 0 ? (
+              {artifact.image ? (
                 <div className="w-full">
                   <div className="bg-gray-50 rounded-xl flex items-center justify-center min-h-[400px] overflow-hidden">
                     <img
-                      src={`${API_BASE_URL}${artifact.images[currentImageIndex]}`}
+                      src={`${API_BASE_URL}${artifact.image}`}
                       alt={artifact.name}
                       className="max-w-full max-h-[400px] object-contain"
                     />
                   </div>
-                  {artifact.images.length > 1 && (
-                    <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                      {artifact.images.map((img, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentImageIndex(idx)}
-                          className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                            idx === currentImageIndex ? 'border-blue-500' : 'border-gray-200 hover:border-blue-300'
-                          }`}
-                        >
-                          <img
-                            src={`${API_BASE_URL}${img}`}
-                            alt={`${artifact.name} ${idx + 1}`}
-                            className="w-full h-full object-contain bg-gray-50"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ) : (
                 <span className="text-9xl text-blue-200">🏺</span>

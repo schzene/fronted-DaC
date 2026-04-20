@@ -3,6 +3,7 @@ export interface Artifact {
   name: string;
   category: string;
   description: string;
+  image?: string;
   similarity_percent?: number;
 }
 
@@ -17,7 +18,13 @@ export interface RecognitionResult {
 
 export interface CategoriesResponse {
   code: number;
-  data: string[];
+  data: {
+    id: string;
+    name: string;
+    dynasty_id: string;
+    description: string;
+    artifact_count: number;
+  }[];
 }
 
 export interface UploadState {

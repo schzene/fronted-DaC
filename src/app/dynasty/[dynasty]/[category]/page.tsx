@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Eye, BookOpen } from 'lucide-react';
 import { getCategoryDetail, ArtifactListItem, CategoryInfo } from '@/lib/api';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dac-backend-list.vercel.app';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-dc.0xc0de.top:34859';
 
 export default function CategoryPage() {
   const params = useParams();

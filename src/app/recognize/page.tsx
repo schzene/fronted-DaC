@@ -70,21 +70,22 @@ export default function RecognizePage() {
         isMain ? 'border-blue-200 shadow-lg' : 'border-gray-100 hover:border-blue-200'
       } transition-all`}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h4 className="text-xl font-bold text-gray-900 font-chinese mb-1">
-            {artifact.name}
-          </h4>
-          <span className="glass-btn-sm px-3 py-1 text-xs">
-            {artifact.category}
-          </span>
+      {artifact.image && (
+        <div className="mb-4 rounded-lg overflow-hidden">
+          <img
+            src={artifact.image}
+            alt={artifact.name}
+            className="w-full h-48 object-cover"
+          />
         </div>
-        <div className="text-right">
-          <div className="text-2xl font-bold text-blue-500">
-            {artifact.similarity_percent}%
-          </div>
-          <div className="text-sm text-gray-400">相似度</div>
-        </div>
+      )}
+      <div className="mb-4">
+        <h4 className="text-xl font-bold text-gray-900 font-chinese mb-1">
+          {artifact.name}
+        </h4>
+        <span className="glass-btn-sm px-3 py-1 text-xs">
+          {artifact.category}
+        </span>
       </div>
       <p className="text-gray-600 leading-relaxed">{artifact.description}</p>
       <div className="mt-4 flex items-center text-blue-500 hover:text-blue-700 cursor-pointer">
